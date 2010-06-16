@@ -5,7 +5,7 @@ Tested with
 [miksago/node-websocket-server](http://github.com/miksago/node-websocket-server)
 v1.2.00.
 
-Requires Node.js patched with [this gist](http://gist.github.com/437842).
+Requires ry/node/187f191558ef45562865e071fdcd11e1dbec79df (as yet unreleased).
 
 ## Usage
 
