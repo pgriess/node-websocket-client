@@ -1,5 +1,7 @@
+// Verify that we can connect to a WebSocket server, exchange messages, and
+// shut down cleanly.
+
 var assert = require('assert');
-var sys = require('sys');
 var WebSocket = require('websocket').WebSocket;
 var WebSocketServer = require('ws').Server;
 
