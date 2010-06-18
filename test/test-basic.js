@@ -4,40 +4,58 @@ var WebSocket = require('websocket').WebSocket;
 var WebSocketServer = require('ws').Server;
 
 var PORT = 1024 + Math.floor(Math.random() * 4096);
-var MSG = 'This is a test: ' + (Math.random() * 100);
+var C_MSG = 'Client test: ' + (Math.random() * 100);
+var S_MSG = 'Server test: ' + (Math.random() * 100);
 
-var gotServerConnection = false;
-var gotServerClose = false;
-var gotClientOpen = true;
-var gotClientData = true;
+var serverGotConnection = false;
+var clientGotOpen = false;
+var clientGotData = false;
+var clientGotMessage = false;
+var serverGotMessage = false;
+var serverGotClose = false;
 
 var wss = new WebSocketServer();
 wss.listen(PORT, 'localhost');
 wss.addListener('connection', function(c) {
-    gotServerConnection = true;
+    serverGotConnection = true;
 
-    c.write(MSG);
+    c.write(S_MSG);
+
+    c.addListener('message', function(m) {
+        assert.equal(m, C_MSG);
+        serverGotMessage = true;
+    });
 
     c.addListener('close', function() {
-        gotServerClose = true;
+        serverGotClose = true;
         wss.close();
     });
 });
 
 var ws = new WebSocket('ws://localhost:' + PORT + '/', 'biff');
 ws.addListener('open', function() {
-    gotClientOpen = true;
+    clientGotOpen = true;
 });
 ws.addListener('data', function(buf) {
-    gotClientData = true;
-    assert.equal(buf.toString('utf8'), MSG);
+    assert.equal(typeof buf, 'object');
+    assert.equal(buf.toString('utf8'), S_MSG);
 
+    clientGotData = true;
+
+    ws.send(C_MSG);
     ws.close();
 });
+ws.onmessage = function(m) {
+    assert.equal(m, S_MSG);
+    assert.equal(typeof m, 'string');
+    clientGotMessage = true;
+};
 
 process.addListener('exit', function() {
-    assert.ok(gotServerConnection);
-    assert.ok(gotClientOpen);
-    assert.ok(gotClientData);
-    assert.ok(gotServerClose);
+    assert.ok(serverGotConnection);
+    assert.ok(clientGotOpen);
+    assert.ok(clientGotData);
+    assert.ok(clientGotMessage);
+    assert.ok(serverGotMessage);
+    assert.ok(serverGotClose);
 });
