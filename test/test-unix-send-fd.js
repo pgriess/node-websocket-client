@@ -1,4 +1,5 @@
-// Verify that we can connect to a server over UNIX domain sockets.
+// Verify that both sides of the WS connection can both send and receive file
+// descriptors.
 
 var assert = require('assert');
 var fs = require('fs');
@@ -10,37 +11,35 @@ var WebSocketServer = require('ws').Server;
 var PATH = path.join(__dirname, 'sock.' + process.pid);
 var S_MSG = 'Server test: ' + (Math.random() * 100);
 
-var serverGotConnection = false;
-var clientGotOpen = false;
-var clientGotData = false;
+var clientReceivedData = false;
+var clientReceivedFD = false;
 
 var wss = new WebSocketServer();
 wss.addListener('listening', function() {
     var ws = new WebSocket('ws+unix://' + PATH);
-    ws.addListener('open', function() {
-        clientGotOpen = true;
-
-        ws.close();
-    });
     ws.addListener('data', function(d) {
         assert.equal(d.toString('utf8'), S_MSG);
-        clientGotData = true;
+
+        clientReceivedData = true;
+    });
+    ws.addListener('fd', function(fd) {
+        assert.ok(fd >= 0);
+
+        clientReceivedFD = true;
+        ws.close();
     });
 });
 wss.addListener('connection', function(c) {
-    serverGotConnection = true;
-
-    c.write(S_MSG);
+    c.write(S_MSG, 0);
     wss.close();
 });
 wss.listen(PATH);
 
 process.addListener('exit', function() {
-    assert.ok(serverGotConnection);
-    assert.ok(clientGotOpen);
-    assert.ok(clientGotData);
+    assert.ok(clientReceivedFD);
+    assert.ok(clientReceivedData);
 
     try {
         fs.unlinkSync(PATH);
-    } catch(e) { }
+    } catch (e) { }
 });
