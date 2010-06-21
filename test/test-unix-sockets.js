@@ -7,9 +7,11 @@ var WebSocket = require('websocket').WebSocket;
 var WebSocketServer = require('ws').Server;
 
 var PATH = path.join(__dirname, 'sock.' + process.pid);
+var S_MSG = 'Server test: ' + (Math.random() * 100);
 
 var serverGotConnection = false;
 var clientGotOpen = false;
+var clientGotData = false;
 
 var wss = new WebSocketServer();
 wss.addListener('listening', function() {
@@ -19,15 +21,21 @@ wss.addListener('listening', function() {
 
         ws.close();
     });
+    ws.addListener('data', function(d) {
+        assert.equal(d.toString('utf8'), S_MSG);
+        clientGotData = true;
+    });
 });
-wss.listen(PATH);
 wss.addListener('connection', function(c) {
     serverGotConnection = true;
 
+    c.write(S_MSG);
     wss.close();
 });
+wss.listen(PATH);
 
 process.addListener('exit', function() {
     assert.ok(serverGotConnection);
     assert.ok(clientGotOpen);
+    assert.ok(clientGotData);
 });
