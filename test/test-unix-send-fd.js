@@ -9,10 +9,13 @@ var WebSocket = require('websocket').WebSocket;
 var WebSocketServer = require('ws').Server;
 
 var PATH = path.join(__dirname, 'sock.' + process.pid);
+var C_MSG = 'Client test: ' + (Math.random() * 100);
 var S_MSG = 'Server test: ' + (Math.random() * 100);
 
 var clientReceivedData = false;
 var clientReceivedFD = false;
+var serverReceivedData = false;
+var serverReceivedFD = false;
 
 var wss = new WebSocketServer();
 wss.addListener('listening', function() {
@@ -21,23 +24,38 @@ wss.addListener('listening', function() {
         assert.equal(d.toString('utf8'), S_MSG);
 
         clientReceivedData = true;
+
+        ws.send(C_MSG, 1);
+        ws.close();
     });
     ws.addListener('fd', function(fd) {
         assert.ok(fd >= 0);
 
         clientReceivedFD = true;
-        ws.close();
     });
 });
 wss.addListener('connection', function(c) {
     c.write(S_MSG, 0);
-    wss.close();
+    c._req.socket.addListener('fd', function(fd) {
+        assert.ok(fd >= 0);
+
+        serverReceivedFD = true;
+    });
+    c.addListener('message', function(d) {
+        assert.equal(d, C_MSG);
+
+        serverReceivedData = true;
+
+        wss.close();
+    });
 });
 wss.listen(PATH);
 
 process.addListener('exit', function() {
     assert.ok(clientReceivedFD);
     assert.ok(clientReceivedData);
+    assert.ok(serverReceivedFD);
+    assert.ok(serverReceivedData);
 
     try {
         fs.unlinkSync(PATH);
