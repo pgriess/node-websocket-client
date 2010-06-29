@@ -10,7 +10,7 @@ Requires [nodejs](http://nodejs.org) 0.1.98 or later.
 ## Usage
 
     var sys = require('sys');
-    var WebSocket = require('websocket').WebSocket;
+    var WebSocket = require('websockets').WebSocket;
 
     var ws = new WebSocket('ws://localhost:8000/biff', 'borf');
     ws.addListener('data', function(buf) {
