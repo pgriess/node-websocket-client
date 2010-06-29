@@ -5,7 +5,7 @@ Tested with
 [miksago/node-websocket-server](http://github.com/miksago/node-websocket-server)
 v1.2.00.
 
-Requires ry/node@187f191558ef45562865e071fdcd11e1dbec79df (as yet unreleased).
+Requires [nodejs](http://nodejs.org) 0.1.98 or later.
 
 ## Usage
 
@@ -25,3 +25,9 @@ Requires ry/node@187f191558ef45562865e071fdcd11e1dbec79df (as yet unreleased).
 This supports the `send()` and `onmessage()` APIs. The `WebSocket` object will
 also emit `data` events that are node `Buffer` objects, in case you want to
 work with something lower-level than strings.
+
+## Transports
+
+Multiple transports are supported, indicated by the scheme provided to the
+`WebSocket` constructor. `ws://` is a standard TCP-based Web Socket;
+`ws+unix://` allows connection to a UNIX socket at the given path.
