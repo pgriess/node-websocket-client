@@ -1,0 +1,9 @@
+{
+    "name" : "websockets-client",
+    "version" : "0.9.0",
+    "description" : "An HTML5 Web Sockets client",
+    "author" : "Peter Griess <pg@std.in>",
+    "engines" : {
+        "node" : "0.1.98 - *"
+    }
+}
