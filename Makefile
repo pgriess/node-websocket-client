@@ -11,5 +11,5 @@ NODE_WS_SERVER_PATH ?= $(HOME)/src/miksago-node-websocket-server/lib
 
 test:
 	for f in `ls -1 test/test-*.js` ; do \
-		NODE_PATH=./lib:$(NODE_WS_SERVER_PATH):$$NODE_PATH node $$f ; \
+		NODE_PATH=./lib:$(NODE_WS_SERVER_PATH):$(NODE_PATH) node $$f ; \
 	done
