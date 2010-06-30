@@ -4,7 +4,7 @@ var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
 var sys = require('sys');
-var WebSocket = require('websockets').WebSocket;
+var WebSocket = require('websocket').WebSocket;
 var WebSocketServer = require('ws').Server;
 
 var PATH = path.join(__dirname, 'sock.' + process.pid);

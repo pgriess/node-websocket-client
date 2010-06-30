@@ -1,7 +1,7 @@
 // Verify that readyState transitions are implemented correctly
 
 var assert = require('assert');
-var WebSocket = require('websockets').WebSocket;
+var WebSocket = require('websocket').WebSocket;
 var WebSocketServer = require('ws').Server;
 
 var PORT = 1024 + Math.floor(Math.random() * 4096);

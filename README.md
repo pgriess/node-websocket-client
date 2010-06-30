@@ -7,10 +7,18 @@ v1.2.00.
 
 Requires [nodejs](http://nodejs.org) 0.1.98 or later.
 
+## Installation
+
+Install this using `npm` as follows
+
+    npm install websocket-client
+
+... or just dump `lib/websocket.js` in your `$NODE_PATH`.
+
 ## Usage
 
     var sys = require('sys');
-    var WebSocket = require('websockets').WebSocket;
+    var WebSocket = require('websocket').WebSocket;
 
     var ws = new WebSocket('ws://localhost:8000/biff', 'borf');
     ws.addListener('data', function(buf) {
