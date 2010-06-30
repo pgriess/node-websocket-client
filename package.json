@@ -1,5 +1,5 @@
 {
-    "name" : "websockets-client",
+    "name" : "websocket-client",
     "version" : "0.9.0",
     "description" : "An HTML5 Web Sockets client",
     "author" : "Peter Griess <pg@std.in>",
@@ -9,13 +9,13 @@
     "repositories" : [
         {
             "type" : "git",
-            "url" : "http://github.com/pgriess/node-websockets-client.git"
+            "url" : "http://github.com/pgriess/node-websocket-client.git"
         }
     ],
     "licenses" : [
         {
             "type" : "BSD",
-            "url" : "http://github.com/pgriess/node-websockets-client/blob/master/LICENSE"
+            "url" : "http://github.com/pgriess/node-websocket-client/blob/master/LICENSE"
         }
     ]
 }
