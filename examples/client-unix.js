@@ -1,5 +1,5 @@
 var sys = require('sys');
-var WebSocket = require('websocket').WebSocket;
+var WebSocket = require('../lib/websocket').WebSocket;
 
 var ws = new WebSocket('ws+unix://' + process.argv[2], 'boffo');
 

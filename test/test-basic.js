@@ -2,8 +2,8 @@
 // shut down cleanly.
 
 var assert = require('assert');
-var WebSocket = require('websocket').WebSocket;
-var WebSocketServer = require('ws').Server;
+var WebSocket = require('../lib/websocket').WebSocket;
+var WebSocketServer = require('websocket-server/ws').Server;
 
 var PORT = 1024 + Math.floor(Math.random() * 4096);
 var C_MSG = 'Client test: ' + (Math.random() * 100);

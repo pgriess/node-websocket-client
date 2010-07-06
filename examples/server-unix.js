@@ -1,5 +1,5 @@
 var sys = require('sys');
-var ws = require('ws');
+var ws = require('websocket-server/ws');
 
 var srv = ws.createServer({ debug : true});
 srv.addListener('connection', function(s) {
