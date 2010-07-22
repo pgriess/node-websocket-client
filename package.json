@@ -17,5 +17,6 @@
             "type" : "BSD",
             "url" : "http://github.com/pgriess/node-websocket-client/blob/master/LICENSE"
         }
-    ]
+    ],
+    "main" : "./lib/websocket"
 }
