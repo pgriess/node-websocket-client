@@ -9,12 +9,14 @@ all: test test-unix
 
 test:
 	for f in `ls -1 test/test-*.js | grep -v unix` ; do \
+		echo $$f ; \
 		node $$f ; \
 	done
 
 test-unix:
 	if [[ -n "$$TEST_UNIX" ]] ; then \
 		for f in `ls -1 test/test-*.js | grep unix` ; do \
+			echo $$f ; \
 			node $$f ; \
 		done \
 	fi
