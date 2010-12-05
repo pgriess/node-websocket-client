@@ -5,7 +5,9 @@ var WebSocket = require('../lib/websocket').WebSocket;
 var WebSocketServer = require('websocket-server/ws/server').Server;
 
 var PORT = 1024 + Math.floor(Math.random() * 4096);
+var S_MSG = 'Server test: ' + (Math.random() * 100);
 
+var clientGotServerClose = false;
 var clientGotServerClose = false;
 var serverGotClientClose = false;
 
@@ -17,16 +19,23 @@ wss.on('connection', function(c) {
         wss.close();
     });
 
+    c.write(S_MSG);
     c.close();
 });
 
 var ws = new WebSocket('ws://localhost:' + PORT);
+ws.onmessage = function(m) {
+    assert.deepEqual(m, {data: S_MSG});
+
+    clientGotServerMessage = true;
+};
 ws.onclose = function() {
     assert.equal(ws.CLOSED, ws.readyState);
     clientGotServerClose = true;
 };
 
 process.on('exit', function() {
+    assert.ok(clientGotServerMessage);
     assert.ok(clientGotServerClose);
     assert.ok(serverGotClientClose);
 });
