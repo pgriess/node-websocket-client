@@ -3,7 +3,7 @@
 
 var assert = require('assert');
 var WebSocket = require('../lib/websocket').WebSocket;
-var WebSocketServer = require('websocket-server/ws').Server;
+var WebSocketServer = require('websocket-server/ws/server').Server;
 
 var PORT = 1024 + Math.floor(Math.random() * 4096);
 var C_MSG = 'Client test: ' + (Math.random() * 100);
@@ -48,8 +48,7 @@ ws.addListener('data', function(buf) {
     ws.close();
 });
 ws.onmessage = function(m) {
-    assert.equal(m, S_MSG);
-    assert.equal(typeof m, 'string');
+    assert.deepEqual(m, {data : S_MSG});
     clientGotMessage = true;
 };
 
