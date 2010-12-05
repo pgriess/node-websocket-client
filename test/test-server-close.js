@@ -1,4 +1,4 @@
-// Verify that a connection can be closed gracefully from both directions.
+// Verify that a connection can be closed gracefully from the server.
 
 var assert = require('assert');
 var WebSocket = require('../lib/websocket').WebSocket;
@@ -7,7 +7,7 @@ var WebSocketServer = require('websocket-server/ws/server').Server;
 var PORT = 1024 + Math.floor(Math.random() * 4096);
 var S_MSG = 'Server test: ' + (Math.random() * 100);
 
-var clientGotServerClose = false;
+var clientGotServerMessage = false;
 var clientGotServerClose = false;
 var serverGotClientClose = false;
 
