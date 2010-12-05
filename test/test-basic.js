@@ -18,27 +18,27 @@ var serverGotClose = false;
 
 var wss = new WebSocketServer();
 wss.listen(PORT, 'localhost');
-wss.addListener('connection', function(c) {
+wss.on('connection', function(c) {
     serverGotConnection = true;
 
     c.write(S_MSG);
 
-    c.addListener('message', function(m) {
+    c.on('message', function(m) {
         assert.equal(m, C_MSG);
         serverGotMessage = true;
     });
 
-    c.addListener('close', function() {
+    c.on('close', function() {
         serverGotClose = true;
         wss.close();
     });
 });
 
 var ws = new WebSocket('ws://localhost:' + PORT + '/', 'biff');
-ws.addListener('open', function() {
+ws.on('open', function() {
     clientGotOpen = true;
 });
-ws.addListener('data', function(buf) {
+ws.on('data', function(buf) {
     assert.equal(typeof buf, 'object');
     assert.equal(buf.toString('utf8'), S_MSG);
 
@@ -52,7 +52,7 @@ ws.onmessage = function(m) {
     clientGotMessage = true;
 };
 
-process.addListener('exit', function() {
+process.on('exit', function() {
     assert.ok(serverGotConnection);
     assert.ok(clientGotOpen);
     assert.ok(clientGotData);

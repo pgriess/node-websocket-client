@@ -18,9 +18,9 @@ var serverReceivedData = false;
 var serverReceivedFD = false;
 
 var wss = new WebSocketServer();
-wss.addListener('listening', function() {
+wss.on('listening', function() {
     var ws = new WebSocket('ws+unix://' + PATH);
-    ws.addListener('data', function(d) {
+    ws.on('data', function(d) {
         assert.equal(d.toString('utf8'), S_MSG);
 
         clientReceivedData = true;
@@ -28,20 +28,20 @@ wss.addListener('listening', function() {
         ws.send(C_MSG, 1);
         ws.close();
     });
-    ws.addListener('fd', function(fd) {
+    ws.on('fd', function(fd) {
         assert.ok(fd >= 0);
 
         clientReceivedFD = true;
     });
 });
-wss.addListener('connection', function(c) {
+wss.on('connection', function(c) {
     c.write(S_MSG, 0);
-    c._req.socket.addListener('fd', function(fd) {
+    c._req.socket.on('fd', function(fd) {
         assert.ok(fd >= 0);
 
         serverReceivedFD = true;
     });
-    c.addListener('message', function(d) {
+    c.on('message', function(d) {
         assert.equal(d, C_MSG);
 
         serverReceivedData = true;
@@ -51,7 +51,7 @@ wss.addListener('connection', function(c) {
 });
 wss.listen(PATH);
 
-process.addListener('exit', function() {
+process.on('exit', function() {
     assert.ok(clientReceivedFD);
     assert.ok(clientReceivedData);
     assert.ok(serverReceivedFD);
