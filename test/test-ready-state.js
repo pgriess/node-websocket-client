@@ -8,6 +8,9 @@ var PORT = 1024 + Math.floor(Math.random() * 4096);
 
 var wss = new WebSocketServer();
 wss.listen(PORT, 'localhost');
+wss.on('connection', function(c) {
+    c.close();
+});
 
 var ws = new WebSocket('ws://localhost:' + PORT);
 assert.equal(ws.readyState, ws.CONNECTING);

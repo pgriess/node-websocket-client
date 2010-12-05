@@ -15,23 +15,26 @@ var clientGotData = false;
 var clientGotMessage = false;
 var serverGotMessage = false;
 var serverGotClose = false;
+var clientGotClose = false;
 
 var wss = new WebSocketServer();
 wss.listen(PORT, 'localhost');
 wss.on('connection', function(c) {
     serverGotConnection = true;
 
-    c.write(S_MSG);
-
     c.on('message', function(m) {
         assert.equal(m, C_MSG);
         serverGotMessage = true;
+
+        c.close();
     });
 
     c.on('close', function() {
         serverGotClose = true;
         wss.close();
     });
+
+    c.write(S_MSG);
 });
 
 var ws = new WebSocket('ws://localhost:' + PORT + '/', 'biff');
@@ -45,11 +48,13 @@ ws.on('data', function(buf) {
     clientGotData = true;
 
     ws.send(C_MSG);
-    ws.close();
 });
 ws.onmessage = function(m) {
     assert.deepEqual(m, {data : S_MSG});
     clientGotMessage = true;
+};
+ws.onclose = function() {
+    clientGotClose = true;
 };
 
 process.on('exit', function() {
@@ -59,4 +64,5 @@ process.on('exit', function() {
     assert.ok(clientGotMessage);
     assert.ok(serverGotMessage);
     assert.ok(serverGotClose);
+    assert.ok(clientGotClose);
 });
