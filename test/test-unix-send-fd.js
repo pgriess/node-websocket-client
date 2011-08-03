@@ -6,7 +6,7 @@ var fs = require('fs');
 var path = require('path');
 var sys = require('sys');
 var WebSocket = require('../lib/websocket').WebSocket;
-var WebSocketServer = require('websocket-server/ws/server').Server;
+var WebSocketServer = require('websocket-server').Server;
 
 var PATH = path.join(__dirname, 'sock.' + process.pid);
 var C_MSG = 'Client test: ' + (Math.random() * 100);

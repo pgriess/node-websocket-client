@@ -2,7 +2,7 @@
 
 var assert = require('assert');
 var WebSocket = require('../lib/websocket').WebSocket;
-var WebSocketServer = require('websocket-server/ws/server').Server;
+var WebSocketServer = require('websocket-server').Server;
 
 var PORT = 1024 + Math.floor(Math.random() * 4096);
 
